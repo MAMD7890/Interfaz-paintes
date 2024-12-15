@@ -1,0 +1,113 @@
+<div class="container">
+  <h2 class="title">Lista de Trabajadores</h2>
+
+  <!-- Barra de búsqueda y botón de nuevo trabajador -->
+  <div class="toolbar">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Buscar por nombre o usuario"
+      [(ngModel)]="searchTerm"
+    />
+    <button class="btn new-user-btn" (click)="openNewWorkerForm()">+ Nuevo Trabajador</button>
+  </div>
+
+  <!-- Tabla de trabajadores -->
+  <div class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Usuario</th>
+          <th>Contraseña</th>
+          <th>Cargo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let worker of filteredWorkers(); let i = index">
+          <td>{{ worker.idworker }}</td>
+          <td>{{ worker.name }}</td>
+          <td>{{ worker.username }}</td>
+          <td>{{ worker.password}}</td>
+          <td>{{ worker.position }}</td>
+          <td>
+            <button class="btn edit-btn" (click)="editWorker(worker)">Editar</button>
+            <button class="btn delete-btn" (click)="deleteWorker(worker)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal para agregar/editar trabajador -->
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ isEditing ? 'Editar Trabajador' : 'Agregar Trabajador' }}</h3>
+        <button class="close-btn" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!-- Campo Nombre -->
+          <div class="form-row">
+            <input
+              type="text"
+              placeholder="Nombre Completo"
+              [(ngModel)]="currentWorker.name"
+              name="name"
+              required
+            />
+          </div>
+
+          <!-- Campo Usuario -->
+          <div class="form-row">
+            <input
+              type="text"
+              placeholder="Nombre de Usuario"
+              [(ngModel)]="currentWorker.username"
+              name="username"
+              required
+            />
+          </div>
+
+          <!-- Campo Contraseña -->
+          <div class="form-row">
+            <input
+              type="password"
+              placeholder="Contraseña"
+              [(ngModel)]="currentWorker.password"
+              name="password"
+              required
+            />
+          </div>
+
+          <!-- Campo Cargo -->
+          <div class="form-row">
+            <select 
+              [(ngModel)]="currentWorker.position" 
+              name="position" 
+              required
+            >
+              <option value="" disabled>Seleccionar Cargo</option>
+              <option value="Vendedor">Vendedor</option>
+              <option value="Administrador">Administrador</option>
+              <option value="Operario">Operario</option>
+              <option value="Gerente">Gerente</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <!-- Botón Cancelar -->
+        <button class="btn cancel-btn" (click)="closeModal()">Cancelar</button>
+      
+        <!-- Botón Agregar/Guardar -->
+        <button class="btn save-btn" (click)="saveWorker()">
+          {{ isEditing ? 'Guardar Cambios' : 'Agregar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

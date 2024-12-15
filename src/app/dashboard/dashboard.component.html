@@ -1,0 +1,62 @@
+<div class="perfil-usuario">
+    <h2>Perfil de Administrador</h2>
+  
+    <div class="informacion-personal">
+      <h3>Información Personal</h3>
+      <form>
+  
+        <div>
+          <label for="nombre">Nombre:</label>
+          <input
+            type="text"
+            id="nombre"
+            [(ngModel)]="usuario.nombre"
+            name="nombre"
+          />
+        </div>
+  
+  
+        <button type="button" (click)="guardarCambios()">Guardar Cambios</button>
+      </form>
+    </div>
+  
+    <div class="cambiar-contrasena">
+      <h3>Cambiar Contraseña</h3>
+      <form>
+        <div>
+          <label for="actual">Contraseña Actual:</label>
+          <input
+            type="password"
+            id="actual"
+            [(ngModel)]="contrasena.actual"
+            name="actual"
+          />
+        </div>
+  
+        <div>
+          <label for="nueva">Nueva Contraseña:</label>
+          <input
+            type="password"
+            id="nueva"
+            [(ngModel)]="contrasena.nueva"
+            name="nueva"
+          />
+        </div>
+  
+        <div>
+          <label for="confirmar">Confirmar Nueva Contraseña:</label>
+          <input
+            type="password"
+            id="confirmar"
+            [(ngModel)]="contrasena.confirmar"
+            name="confirmar"
+          />
+        </div>
+  
+        <button type="button" (click)="cambiarContrasena()">
+          Cambiar Contraseña
+        </button>
+      </form>
+    </div>
+  </div>
+  
