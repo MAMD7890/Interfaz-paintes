@@ -15,4 +15,4 @@ export class LogoutComponent {
     console.log('Sesión cerrada (simulación)');
     this.router.navigate(['/login']); // Navegación simulada
   }
-}
+  }

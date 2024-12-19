@@ -18,6 +18,7 @@ export const routes: Routes = [
   { path: 'creacion-producto', component: CreacionProductoComponent },
   { path: 'inventario', component: InventarioComponent },
   { path: 'formula', component: FormulaComponent },
+  { path: 'logout', component: LogoutComponent },
   
   { path: '**', redirectTo: 'login' },
    
