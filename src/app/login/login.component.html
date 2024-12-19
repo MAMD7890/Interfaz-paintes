@@ -8,6 +8,11 @@
 
     <div class="right-panel">
         <h1>Iniciar sesión</h1>
+
+        <div *ngIf="mensajeError" class="alert alert-danger text-center" role="alert">
+            {{ mensajeError }}
+        </div>
+
         <form (ngSubmit)="onSubmit()">
             <div class="mb-3">
                 <label for="usuario" class="form-label">Usuario</label>
@@ -31,14 +36,12 @@
                     required
                 />
             </div>
-            <div class="form-check mb-3">
-                <input type="checkbox" class="form-check-input" id="rememberMe" />
-                <label class="form-check-label" for="rememberMe">Recuérdame</label>
-            </div>
+              
             <div class="d-grid gap-2">
-                <button   type="submit" class="btn custom-button">Ingresar</button>
-                <a href="/dashboard" class="text-center link-black">¿Olvidaste la contraseña?</a>
+                <button type="submit" class="btn custom-button">Ingresar</button>
+                        <!-- Sección para el mensaje de error -->
             </div>
+
         </form>
     </div>
 </div>

@@ -46,10 +46,11 @@
             <tr class="acciones" *ngFor="let producto of paginatedProducts">
               <td>{{ producto.name }}</td>
               <td>{{ producto.category }}</td>
-              <td>
+              <td style="display: flex; justify-content: center; align-items: center; gap: 10px;">
                 <button class="btn btn-info btn-sm" (click)="editarProducto(producto)">Editar</button>
                 <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto)">Eliminar</button>
               </td>
+              
             </tr>
           </tbody>
         </table>

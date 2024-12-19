@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { WorkerService } from '../services/worker.service';
-import { Worker } from '../interface/worker.model';
+import { AuthService } from '../services/auth.service';
+import { User } from '../interface/user.model';
+import { RegisterRequest, Role } from '../interface/registerRequest.model';
+import { AuthResponse } from '../interface/AuthResponse.model';
 
 @Component({
   selector: 'app-settings',
@@ -15,68 +17,80 @@ import { Worker } from '../interface/worker.model';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  workers: Worker[] = [];
+  isModalVisible: boolean = false; // Variable para controlar la visibilidad del modal
+ username: string = '';
+ lastname: string = '';
+ firstname: string = '';
+ password: string = '';
+ role: string = '';  
+ errorMessage: string = '';  
+ successMessage: string = '';  
+
+
+  user: RegisterRequest[] = [];
   searchTerm = '';
   showModal = false;
   isEditing = false;
-  currentWorker: Worker = {
-    name: '',
+  currentUser: RegisterRequest = {
+    role: Role.USER,
     username: '',
+    lastname: '',
+    firstname: '',
     password: '',
-    position: ''
+    id: 0
   };
 
-  constructor(private workerService: WorkerService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.loadWorkers();
+    this.loadUsers();
   }
 
-  loadWorkers() {
-    this.workerService.getWorkers().subscribe({
-      next: (workers) => {
-        this.workers = workers;
+  loadUsers(): void {
+    this.authService.getAllUsers().subscribe({
+      next: (users) => {
+        this.user = users;
       },
       error: (error) => {
         console.error('Error fetching workers', error);
-        // Opcional: mostrar mensaje de error al usuario
       }
     });
   }
 
-  filteredWorkers() {
+  filteredUsers() {
     if (!this.searchTerm) {
-      return this.workers;
+      return this.user;
     }
-    return this.workers.filter((worker) =>
-      worker.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      worker.username.toLowerCase().includes(this.searchTerm.toLowerCase())
+    return this.user.filter((user) =>
+      user.username.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
-  openNewWorkerForm() {
+  openNewUsersForm() {
     this.isEditing = false;
-    this.currentWorker = {
-      name: '',
-      username: '',
-      password: '',
-      position: ''
+    this.currentUser = {
+      role:Role.USER,
+    username: '',
+    lastname: '',
+    firstname:'',
+    password: '',
+    id: 0
     };
     this.showModal = true;
   }
 
-  editWorker(worker: Worker) {
+  editUser(user: RegisterRequest) {
     this.isEditing = true;
-    this.currentWorker = { ...worker }; // Copia del trabajador
+    this.currentUser = { ...user }; // Copia del trabajador
     this.showModal = true;
   }
 
-  deleteWorker(worker: Worker) {
+  deleteUser(user: RegisterRequest) {
     if (confirm('¿Estás seguro de eliminar este trabajador?')) {
-      if (worker.idworker) {
-        this.workerService.deleteWorker(worker.idworker).subscribe({
+      if (user.id) {
+        this.authService.deleteUser(user.id).subscribe({
           next: () => {
-            this.loadWorkers(); // Recargar lista después de eliminar
+            this.loadUsers(); // Recargar lista después de eliminar
           },
           error: (error) => {
             console.error('Error deleting worker', error);
@@ -86,37 +100,35 @@ export class SettingsComponent implements OnInit {
       }
     }
   }
+  closeModal(): void {
+    this.showModal = false;
+  }
+  closeCreateModal(): void{
+    this.showModal= false;
 
-  saveWorker() {
-    if (this.isEditing && this.currentWorker.idworker) {
-      // Actualizar trabajador existente
-      this.workerService.updateWorker(this.currentWorker).subscribe({
-        next: () => {
-          this.loadWorkers();
-          this.closeModal();
+  }
+
+    // Método para registrar al usuario
+    register(): void {
+      const newUser: RegisterRequest = {
+        username: this.currentUser.username,
+        lastname: this.currentUser.lastname,
+        firstname: this.currentUser.firstname,
+        password: this.currentUser.password,
+        role: this.role==="admin"?Role.ADMIN:Role.USER
+      };
+      
+  
+      this.authService.register(newUser).subscribe({
+        next: (response: AuthResponse) => {
+          this.successMessage = 'Usuario registrado con éxito.';
+          this.closeCreateModal();
+          this.loadUsers();
         },
-        error: (error) => {
-          console.error('Error updating worker', error);
-          // Opcional: mostrar mensaje de error al usuario
-        }
-      });
-    } else {
-      // Crear nuevo trabajador
-      const { idworker, ...workerToCreate } = this.currentWorker;
-      this.workerService.createWorker(workerToCreate).subscribe({
-        next: () => {
-          this.loadWorkers();
-          this.closeModal();
-        },
-        error: (error) => {
-          console.error('Error creating worker', error);
-          // Opcional: mostrar mensaje de error al usuario
+        error: (err) => {
+          this.errorMessage = 'Error al registrar el usuario. Intenta nuevamente.';
+          console.error(err);
         }
       });
     }
   }
-
-  closeModal() {
-    this.showModal = false;
-  }
-}

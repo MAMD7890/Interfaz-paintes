@@ -3,7 +3,6 @@
     <h1>Lista de componentes</h1>
   </div>
 
-  <!-- Barra de búsqueda y botón "Crear nuevo componente" en la misma línea -->
   <div class="search-container">
     <div class="search-input-container">
       <input
@@ -13,65 +12,51 @@
         placeholder="Buscar por nombre..."
         class="search-input"
       />
-      
     </div>
     <button class="btn-new-component" (click)="openCreateModal()"> + Crear nuevo componente</button>
   </div>
 
- <!-- Tabla de inventario -->
-<div class="table-container">
-  <table>
-    <thead>
-      <tr>
-        <th>Nombre del Químico</th>
-        <th>Stock Actual</th>
-        <th>Unidad</th>
-        <th>Stock Mínimo</th>
-        <th>Estado</th>
-        <th>Acción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="acciones" *ngFor="let item of paginatedComponents">
-        <td>{{ item.name }}</td>
-        <td>{{ item.currentStock }}</td>
-        <td>{{ item.unitOfMeasurement }}</td>
-        <td>{{ item.minimumStock }}</td>
-        <td class="status">
-          <span
-            [ngClass]="{
-              'badge-sufficient': item.stock > item.minStock,
-              'badge-low': item.stock <= item.minStock
-            }"
-          >
-            {{ item.stock > item.minStock ? 'Suficiente' : 'Bajo' }}
-          </span>
-        </td>
-        <td>
-          <button class="btn-edit" (click)="editStock(item)">Editar</button>
-          <button class="btn-delete" (click)="deleteStockProduct(item.idcomponent)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <!-- Pagination Controls -->
-  <div class="pagination-container mt-3" *ngIf="totalPages > 1">
-    <button class="btn-eliminar" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
-      Anterior
-    </button>
-    <button class="btn-eliminar" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
-      Siguiente
-    </button>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre del Químico</th>
+          <th>Stock Actual</th>
+          <th>Unidad</th>
+          <th>Stock Mínimo</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="acciones" *ngFor="let item of paginatedComponents">
+          <td>{{ item.name }}</td>
+          <td>{{ item.currentStock }}</td>
+          <td>{{ item.unitOfMeasurement }}</td>
+          <td>{{ item.minimumStock }}</td>
+          <td class="status">
+            <span [ngClass]="getStatusColor(getStockStatus(item.currentStock, item.minimumStock))">
+              {{ getStockStatus(item.currentStock, item.minimumStock) | titlecase }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-edit" (click)="editStock(item)">Editar</button>
+            <button class="btn-delete" (click)="deleteStockProduct(item)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="pagination-container mt-3" *ngIf="totalPages > 1">
+      <button class="btn-eliminar" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+        Anterior
+      </button>
+      <button class="btn-eliminar" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+        Siguiente
+      </button>
+    </div>
   </div>
-</div>
 
-
-
-
-
-
-
-  
   <!-- Modal para editar un químico -->
   <div *ngIf="selectedItem.name!== ''" class="modal">
     <div class="modal-content">
@@ -177,4 +162,12 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal de confirmación de eliminación -->
+  <app-delete-confirmation-modal
+    [show]="showDeleteModal"
+    [itemName]="itemToDelete?.name"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()">
+  </app-delete-confirmation-modal>
 </div>

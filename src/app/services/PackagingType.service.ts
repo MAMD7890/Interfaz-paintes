@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PackagingType } from '../interface/PackagingType.model';
 import { environment } from '../enviroment/enviromen';
@@ -8,7 +8,7 @@ import { environment } from '../enviroment/enviromen';
   providedIn: 'root',
 })
 export class PackagingTypeService {
-    private baseUrl = environment.apiUrl+'/packaging-types';
+  private baseUrl = environment.apiUrl + '/packaging-types';
 
   constructor(private http: HttpClient) {}
 
@@ -16,7 +16,9 @@ export class PackagingTypeService {
    * Obtiene todos los tipos de empaque
    */
   getAllPackagingTypes(): Observable<PackagingType[]> {
-    return this.http.get<PackagingType[]>(this.baseUrl);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<PackagingType[]>(this.baseUrl, { headers });
   }
 
   /**
@@ -24,7 +26,9 @@ export class PackagingTypeService {
    * @param id ID del tipo de empaque
    */
   getPackagingTypeById(id: number): Observable<PackagingType> {
-    return this.http.get<PackagingType>(`${this.baseUrl}/${id}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<PackagingType>(`${this.baseUrl}/${id}`, { headers });
   }
 
   /**
@@ -32,7 +36,9 @@ export class PackagingTypeService {
    * @param packagingType Objeto PackagingType a crear
    */
   createPackagingType(packagingType: PackagingType): Observable<PackagingType> {
-    return this.http.post<PackagingType>(this.baseUrl, packagingType);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<PackagingType>(this.baseUrl, packagingType, { headers });
   }
 
   /**
@@ -41,7 +47,9 @@ export class PackagingTypeService {
    * @param packagingType Objeto PackagingType con los nuevos datos
    */
   updatePackagingType(id: number, packagingType: PackagingType): Observable<PackagingType> {
-    return this.http.put<PackagingType>(`${this.baseUrl}/${id}`, packagingType);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<PackagingType>(`${this.baseUrl}/${id}`, packagingType, { headers });
   }
 
   /**
@@ -49,6 +57,8 @@ export class PackagingTypeService {
    * @param id ID del tipo de empaque
    */
   deletePackagingType(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, { headers });
   }
 }

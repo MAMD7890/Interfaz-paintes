@@ -12,9 +12,7 @@ import { ProductService } from '../services/product.service';
   styleUrls: ['./creacion-producto.component.css'],
 })
 export class CreacionProductoComponent implements OnInit {
-  // List of measurement units
-  unidades: string[] = ['Kilogramo', 'Litro', 'Unidad'];
-  
+  // List of measurement units  
   // Arrays and main product properties
   productos: Product[] = [];
   nuevoProducto: Product = this.resetProducto();
@@ -205,17 +203,6 @@ export class CreacionProductoComponent implements OnInit {
       this.errorMessage = 'El nombre del producto es obligatorio';
       return false;
     }
-
-    if (this.nuevoProducto.quantity < 0) {
-      this.errorMessage = 'La cantidad no puede ser negativa';
-      return false;
-    }
-
-    if (!this.nuevoProducto.unitOfMeasurement) {
-      this.errorMessage = 'Debe seleccionar una unidad de medida';
-      return false;
-    }
-
     return true;
   }
 

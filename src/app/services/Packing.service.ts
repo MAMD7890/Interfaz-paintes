@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Packing } from '../interface/Packing.model';
 import { environment } from '../enviroment/enviromen';
@@ -8,17 +8,22 @@ import { environment } from '../enviroment/enviromen';
   providedIn: 'root',
 })
 export class PackingService {
-    private baseUrl = environment.apiUrl+'/packings';
+  private baseUrl = environment.apiUrl + '/packings';
 
   constructor(private http: HttpClient) {}
 
-
+  // Obtener todos los packings
   getAllPackings(): Observable<Packing[]> {
-    return this.http.get<Packing[]>(this.baseUrl);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Packing[]>(this.baseUrl, { headers });
   }
 
+  // Obtener un packing por su ID
   getPackingById(id: number): Observable<Packing> {
-    return this.http.get<Packing>(`${this.baseUrl}/${id}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Packing>(`${this.baseUrl}/${id}`, { headers });
   }
 
   /**
@@ -26,7 +31,9 @@ export class PackingService {
    * @param packing Objeto Packing a crear
    */
   createPacking(packing: Packing[]): Observable<Packing[]> {
-    return this.http.post<Packing[]>(this.baseUrl, packing);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<Packing[]>(this.baseUrl, packing, { headers });
   }
 
   /**
@@ -35,7 +42,9 @@ export class PackingService {
    * @param packing Objeto Packing con los nuevos datos
    */
   updatePacking(id: number, packing: Packing): Observable<Packing> {
-    return this.http.put<Packing>(`${this.baseUrl}/${id}`, packing);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<Packing>(`${this.baseUrl}/${id}`, packing, { headers });
   }
 
   /**
@@ -43,6 +52,8 @@ export class PackingService {
    * @param id ID del packing
    */
   deletePacking(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, { headers });
   }
 }

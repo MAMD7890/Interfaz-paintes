@@ -16,51 +16,70 @@ export class FormulaService {
   createFormulaWithIngredients(
     formulaWithArrayDTO: FormulaWithArrayDTO
   ): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(this.baseUrl+"/create-with-ingredients", formulaWithArrayDTO, { headers });
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post<any>(`${this.baseUrl}/create-with-ingredients`, formulaWithArrayDTO, { headers });
   }
-    // Obtener todas las fórmulas transformadas
-    getAllFormulasTransformed(): Observable<FormulaWithArrayDTO[]> {
-      return this.http.get<FormulaWithArrayDTO[]>(`${this.baseUrl}/all-transformed`);
-    }
-
-  // Obtener todas las fórmulas
+  
+  getAllFormulasTransformed(): Observable<FormulaWithArrayDTO[]> {
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<FormulaWithArrayDTO[]>(`${this.baseUrl}/all-transformed`, { headers });
+  }
+  
   getAllFormulas(): Observable<Formula[]> {
-    return this.http.get<Formula[]>(`${this.baseUrl}/`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Formula[]>(`${this.baseUrl}/`, { headers });
   }
+  
 
   deleteFormulasByProductId(productId: number): Observable<void> {
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const url = `${this.baseUrl}/product/${productId}`;
-    return this.http.delete<void>(url);
+    return this.http.delete<void>(url, { headers });
   }
+  
 
-  // Obtener una fórmula por su ID
   getFormulaById(id: number): Observable<Formula> {
-    return this.http.get<Formula>(`${this.baseUrl}/${id}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Formula>(`${this.baseUrl}/${id}`, { headers });
   }
+  
 
-  // Crear una nueva fórmula
   createFormula(formula: Formula): Observable<Formula> {
-    return this.http.post<Formula>(`${this.baseUrl}/create`, formula);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<Formula>(`${this.baseUrl}/create`, formula, { headers });
   }
-
-  // Actualizar una fórmula existente
+  
   updateFormula(id: number, formula: Formula): Observable<Formula> {
-    return this.http.put<Formula>(`${this.baseUrl}/${id}`, formula);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<Formula>(`${this.baseUrl}/${id}`, formula, { headers });
   }
+  
 
-  // Eliminar una fórmula por su ID
   deleteFormula(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, { headers });
   }
-
-  // Obtener fórmulas por el ID del producto
   getFormulasByProduct(productId: number): Observable<Formula[]> {
-    return this.http.get<Formula[]>(`${this.baseUrl}/product/${productId}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Formula[]>(`${this.baseUrl}/product/${productId}`, { headers });
   }
-
-  // Obtener fórmulas por el ID del componente
+  
   getFormulasByComponent(componentId: number): Observable<Formula[]> {
-    return this.http.get<Formula[]>(`${this.baseUrl}/component/${componentId}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Formula[]>(`${this.baseUrl}/component/${componentId}`, { headers });
   }
+  
 }

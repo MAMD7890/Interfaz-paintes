@@ -8,6 +8,16 @@
     background-color: #e9e7e7; /* Fondo gris claro */
 }
 
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+
 /* Contenedor principal del formulario */
 .login-container {
     display: flex;

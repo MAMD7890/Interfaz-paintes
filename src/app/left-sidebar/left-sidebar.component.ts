@@ -14,11 +14,6 @@ export class LeftSidebarComponent {
   changeIsLeftSidebarCollapsed = output<boolean>();
   items = [
     {
-      routeLink: 'dashboard',
-      icon: 'fal fa-user',
-      label: 'Perfil',
-    },
-    {
       routeLink: 'products',
       icon: 'fal fa-box-open',
       label: 'Productos',
@@ -47,6 +42,11 @@ export class LeftSidebarComponent {
       routeLink: 'settings',
       icon: 'fal fa-cog',
       label: 'configuracion',
+    },
+    {
+      routeLink: 'logout',
+      icon: 'fal fa-sign-out-alt',
+      label: 'salir',
     },
     
     

@@ -9,7 +9,7 @@
       placeholder="Buscar por nombre o usuario"
       [(ngModel)]="searchTerm"
     />
-    <button class="btn new-user-btn" (click)="openNewWorkerForm()">+ Nuevo Trabajador</button>
+    <button class="btn new-user-btn" (click)="openNewUsersForm()">+ Nuevo Trabajador</button>
   </div>
 
   <!-- Tabla de trabajadores -->
@@ -19,22 +19,24 @@
         <tr>
           <th>ID</th>
           <th>Nombre</th>
+          <th>Apellido</th>
           <th>Usuario</th>
-          <th>Contraseña</th>
-          <th>Cargo</th>
+          <th>Rol</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let worker of filteredWorkers(); let i = index">
-          <td>{{ worker.idworker }}</td>
-          <td>{{ worker.name }}</td>
-          <td>{{ worker.username }}</td>
-          <td>{{ worker.password}}</td>
-          <td>{{ worker.position }}</td>
+        <tr *ngFor="let worker of filteredUsers(); let i = index">
+          <td>{{ worker.id }}</td>
+          <td>{{ worker.firstname }}</td>
+          <td>{{ worker.lastname }}</td>
+          <td>{{ worker.username}}</td>
+          <td>{{ worker.role}}</td>
+
+
           <td>
-            <button class="btn edit-btn" (click)="editWorker(worker)">Editar</button>
-            <button class="btn delete-btn" (click)="deleteWorker(worker)">Eliminar</button>
+            <button class="btn edit-btn" (click)="editUser(worker)">Editar</button>
+            <button class="btn delete-btn" (click)="deleteUser(worker)">Eliminar</button>
           </td>
         </tr>
       </tbody>
@@ -54,19 +56,29 @@
           <div class="form-row">
             <input
               type="text"
-              placeholder="Nombre Completo"
-              [(ngModel)]="currentWorker.name"
+              placeholder="Nombre"
+              [(ngModel)]="currentUser.firstname"
               name="name"
               required
             />
           </div>
+                    <!-- Campo Nombre -->
+                    <div class="form-row">
+                      <input
+                        type="text"
+                        placeholder="Apellido"
+                        [(ngModel)]="currentUser.lastname"
+                        name="name"
+                        required
+                      />
+                    </div>
 
           <!-- Campo Usuario -->
           <div class="form-row">
             <input
               type="text"
               placeholder="Nombre de Usuario"
-              [(ngModel)]="currentWorker.username"
+              [(ngModel)]="currentUser.username"
               name="username"
               required
             />
@@ -77,7 +89,7 @@
             <input
               type="password"
               placeholder="Contraseña"
-              [(ngModel)]="currentWorker.password"
+              [(ngModel)]="currentUser.password"
               name="password"
               required
             />
@@ -86,15 +98,14 @@
           <!-- Campo Cargo -->
           <div class="form-row">
             <select 
-              [(ngModel)]="currentWorker.position" 
+            id="role"
+              [(ngModel)]="currentUser.role" 
               name="position" 
               required
             >
-              <option value="" disabled>Seleccionar Cargo</option>
-              <option value="Vendedor">Vendedor</option>
-              <option value="Administrador">Administrador</option>
-              <option value="Operario">Operario</option>
-              <option value="Gerente">Gerente</option>
+              <option value="" disabled selected>Seleccionar rol</option>
+              <option value="admin">ADMIN</option>
+              <option value="user">USER</option>
             </select>
           </div>
         </form>
@@ -104,7 +115,7 @@
         <button class="btn cancel-btn" (click)="closeModal()">Cancelar</button>
       
         <!-- Botón Agregar/Guardar -->
-        <button class="btn save-btn" (click)="saveWorker()">
+        <button class="btn save-btn" (click)="register()">
           {{ isEditing ? 'Guardar Cambios' : 'Agregar' }}
         </button>
       </div>

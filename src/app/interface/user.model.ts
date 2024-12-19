@@ -1,11 +1,10 @@
-import { Role } from "./role.model";
 
 export interface User {
-    iduser?: number;
-    email?: string;
-    username?: string;
-    password?: string;
-    worker?: Worker;
-    role?: Role;
-  }
-  
+  id: number;             // Identificador del usuario
+  username: string;       // Nombre de usuario
+  lastname?: string;       // Apellido del usuario
+  firstname?: string;     // Nombre (opcional)
+  password?: string;       // Contraseña del usuario
+}
+
+

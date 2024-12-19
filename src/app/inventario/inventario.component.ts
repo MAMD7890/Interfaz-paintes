@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Stock } from '../interface/component.model';
 import { ComponentsService } from '../services/component.service';
+import { DeleteConfirmationModalComponent } from './DeleteConfirmationModal.Component'
 
 @Component({
   selector: 'app-inventario',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, DeleteConfirmationModalComponent],
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css']
 })
@@ -19,20 +20,34 @@ export class InventarioComponent implements OnInit {
   ];
 
   componentes: any[] = [];
-  searchTerm: string = ''; // Propiedad para la barra de búsqueda
+  searchTerm: string = '';
+  showDeleteModal = false;
+  itemToDelete: any = null;
+
+  // Definir un umbral para considerar el stock como bajo (porcentaje)
+  readonly STOCK_THRESHOLD = 50; // 20% por encima del stock mínimo
 
   selectedItem: Stock = { name: '', quantity: 0, currentStock: '', minimumStock: '', unitOfMeasurement: '' };
   showCreateModal = false;
   stock: Stock = { name: '', quantity: 0, currentStock: '', minimumStock: '', unitOfMeasurement: '' };
   newChemical = { name: '', quantity: '', currentStock: '', minimumStock: '', unitOfMeasurement: '' };
 
-  currentPage: number = 1; // Página actual
-  itemsPerPage: number = 5; // Número de productos por página
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
 
   constructor(private componentsService: ComponentsService) {}
 
   ngOnInit(): void {
     this.fetchComponents();
+  }
+
+  getStockStatus(currentStock: number, minimumStock: number): 'bajo' | 'suficiente' {
+    const difference = ((currentStock - minimumStock) / minimumStock) * 100;
+    return difference <= this.STOCK_THRESHOLD ? 'bajo' : 'suficiente';
+  }
+
+  getStatusColor(status: string): string {
+    return status === 'bajo' ? 'badge-low' : 'badge-sufficient';
   }
 
   get paginatedComponents(): any[] {
@@ -93,21 +108,30 @@ export class InventarioComponent implements OnInit {
     this.closeModal();    
   }
 
-  deleteStockProduct(id: number): void {
-    if (!confirm('¿Estás seguro de que deseas eliminar este componente?')) {
-      return; 
+  deleteStockProduct(item: any): void {
+    this.itemToDelete = item;
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete(): void {
+    if (this.itemToDelete) {
+      this.componentsService.deleteComponent(this.itemToDelete.idcomponent).subscribe(
+        () => {
+          console.log(`Component with ID ${this.itemToDelete.idcomponent} deleted successfully.`);
+          this.fetchComponents();
+          this.showDeleteModal = false;
+          this.itemToDelete = null;
+        },
+        (error) => {
+          console.error('Error deleting component:', error);
+        }
+      );
     }
-  
-    this.componentsService.deleteComponent(id).subscribe(
-      () => {
-        console.log(`Component with ID ${id} deleted successfully.`);
-        this.fetchComponents(); 
-      },
-      (error) => {
-        console.error('Error deleting component:', error);
-        alert('Error al eliminar el componente. Por favor intenta de nuevo.');
-      }
-    );
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.itemToDelete = null;
   }
   
   closeModal() {

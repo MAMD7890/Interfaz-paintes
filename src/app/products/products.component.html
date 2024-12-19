@@ -47,53 +47,50 @@
   <div class="modal-content">
     <button class="close-btn" (click)="closePacking()">&times;</button>
     <h4 class="text-center mb-4">Registrar Producción - {{ selectedProduct.name }}</h4>
-    <form>
-      <!-- ID del Operador -->
-      <div class="form-group">
-        <label for="operatorId">ID del Operador</label>
-        <input
-          [(ngModel)]="operatorId"
-          name="operatorId"
-          type="text"
-          class="form-control"
-          placeholder="Ingrese ID del Operador"
-          required
-        />
-      </div>
-
-      <!-- Sección de Empaques -->
-      <div>
-        <h5 class="mt-4">Selección de Empaques</h5>
-        <div *ngFor="let pack of packages; let i = index" class="package-row mb-3">
-          <div class="form-group">
-            <label for="packageType{{ i }}">Tipo de Empaque</label>
-            <select id="selectPackagingtype" class="form-control" [(ngModel)]="packages[i].packagingTypeId.idpackagingType" [ngModelOptions]="{standalone: true}">
-              <option [value]="null" disabled>Selecciona un tipo de empaque</option>
-              <option *ngFor="let packagingtype of packagingtypes" [value]="packagingtype.idpackagingType">
-                {{ packagingtype.name }}
-              </option>
-            </select>
-
-           
+    <div class="form-container">
+      <form>
+        <div>
+          <h5 class="mt-4">Selección de Empaques</h5>
+          <div *ngFor="let pack of packages; let i = index" class="package-row">
+            <div class="form-group">
+              <label for="packageType{{ i }}">Tipo de Empaque</label>
+              <select 
+                id="selectPackagingtype" 
+                class="form-control" 
+                [(ngModel)]="packages[i].packagingTypeId.idpackagingType" 
+                [ngModelOptions]="{standalone: true}"
+              >
+                <option [value]="null" disabled>Selecciona un tipo de empaque</option>
+                <option *ngFor="let packagingtype of packagingtypes" [value]="packagingtype.idpackagingType">
+                  {{ packagingtype.name }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="quantity{{ i }}">Cantidad</label>
+              <input
+                [(ngModel)]="packages[i].quantity"
+                [name]="'quantity' + i"
+                id="quantity{{ i }}"
+                type="number"
+                class="form-control"
+                placeholder="Ingrese cantidad"
+                min="1"
+                required
+              />
+            </div>
+            <button type="button" class="btn btn-danger btn-sm" (click)="removePackage(i)">
+              Eliminar
+            </button>
           </div>
-          <div class="form-group">
-            <label for="quantity{{ i }}">Cantidad</label>
-            <input
-              [(ngModel)]="packages[i].quantity"
-              [name]="'quantity' + i"
-              id="quantity{{ i }}"
-              type="number"
-              class="form-control"
-              placeholder="Ingrese cantidad"
-              min="1"
-              required
-            />
+          <div class="button-container">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="addPackage()">
+              Agregar Empaque
+            </button>
           </div>
-          <button type="button" class="btn btn-danger btn-sm" (click)="removePackage(i)">Eliminar</button>
         </div>
-        <button type="button" class="btn btn-secondary btn-sm" (click)="addPackage()">Agregar Empaque</button>
-      </div>
-    </form>
+      </form>
+    </div>
 
     <!-- Botones del modal -->
     <div class="form-buttons mt-4">

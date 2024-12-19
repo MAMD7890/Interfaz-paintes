@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../interface/product.model';
 import { environment } from '../enviroment/enviromen';
@@ -13,36 +13,47 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  // Create a new product
   createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.baseUrl, product);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<Product>(this.baseUrl, product, { headers });
   }
+  
 
-  // Upload image for a specific product
   uploadImage(file: File, productId: number | undefined): Observable<Product> {
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const formData = new FormData();
     formData.append('file', file);
-
-    return this.http.post<Product>(`${this.baseUrl}/upload/${productId}`, formData);
+  
+    return this.http.post<Product>(`${this.baseUrl}/upload/${productId}`, formData, { headers });
   }
-
-  // Get all products
+  
   getAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.baseUrl);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Product[]>(this.baseUrl, { headers });
   }
+  
 
-  // Get product by ID
   getProductById(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.baseUrl}/${id}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Product>(`${this.baseUrl}/${id}`, { headers });
   }
+  
 
-  // Update an existing product
   updateProduct(id: number, product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.baseUrl}/${id}`, product);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<Product>(`${this.baseUrl}/${id}`, product, { headers });
   }
+  
 
-  // Delete a product
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    const token = localStorage.getItem("authToken");
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, { headers });
   }
+  
 }
