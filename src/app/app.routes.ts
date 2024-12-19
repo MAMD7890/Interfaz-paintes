@@ -7,6 +7,7 @@ import { loginComponent } from './login/login.component';
 import { CreacionProductoComponent } from './creacion-producto/creacion-producto.component';
 import { InventarioComponent } from './inventario/inventario.component';
 import { FormulaComponent } from './formula/formula.component';
+import { LogoutComponent } from './logout/logout.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, 
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'creacion-producto', component: CreacionProductoComponent },
   { path: 'inventario', component: InventarioComponent },
   { path: 'formula', component: FormulaComponent },
+  { path: 'logout', component: LogoutComponent },
   
   { path: '**', redirectTo: 'login' },
    

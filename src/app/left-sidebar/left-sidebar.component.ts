@@ -48,6 +48,11 @@ export class LeftSidebarComponent {
       icon: 'fal fa-cog',
       label: 'configuracion',
     },
+    {
+      routeLink: 'logout',
+      icon: 'fal fa-sign-out-alt',
+      label: 'salir',
+    },
     
     
     
